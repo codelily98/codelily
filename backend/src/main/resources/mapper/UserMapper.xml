@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.codelily.backend.mapper.UserMapper">
+
+    <!-- 사용자 단건 조회 -->
+    <select id="findById" parameterType="long" resultType="com.codelily.backend.domain.User">
+        SELECT *
+        FROM users
+        WHERE id = #{id}
+    </select>
+
+    <!-- 이메일로 사용자 조회 -->
+    <select id="findByEmail" parameterType="string" resultType="com.codelily.backend.domain.User">
+        SELECT *
+        FROM users
+        WHERE email = #{email}
+    </select>
+
+    <!-- provider + providerId로 사용자 조회 (소셜 로그인 전용) -->
+    <select id="findByProviderId" resultType="com.codelily.backend.domain.User">
+        SELECT *
+        FROM users
+        WHERE provider = #{provider}
+          AND provider_id = #{providerId}
+    </select>
+
+    <!-- 사용자 전체 조회 -->
+    <select id="findAll" resultType="com.codelily.backend.domain.User">
+        SELECT *
+        FROM users
+        ORDER BY created_at DESC
+    </select>
+
+    <!-- 특정 기간 내 가입한 사용자 수 -->
+    <select id="countNewUsers" resultType="int">
+        SELECT COUNT(*)
+        FROM users
+        WHERE created_at BETWEEN #{start} AND #{end}
+    </select>
+
+    <!-- 사용자 프로필 업데이트 -->
+    <update id="updateProfile">
+        UPDATE users
+        SET nickname   = #{nickname},
+            avatar_url = #{avatarUrl},
+            updated_at = NOW()
+        WHERE id = #{id}
+    </update>
+
+    <!-- 소셜 로그인 사용자 Refresh 토큰 갱신 -->
+    <update id="updateRefreshToken">
+        UPDATE users
+        SET refresh_token = #{refreshToken},
+            updated_at = NOW()
+        WHERE id = #{id}
+    </update>
+
+</mapper>
