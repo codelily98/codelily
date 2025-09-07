@@ -1,5 +1,9 @@
-import "./globals.css";
-import Providers from "./providers";
+"use client";
+
+import "./styles/globals.css";
+import { RecoilRoot } from "recoil";
+import Header from "./components/Header";
+import Footer from "./components/Footer";
 
 export default function RootLayout({
     children,
@@ -7,9 +11,17 @@ export default function RootLayout({
     children: React.ReactNode;
 }) {
     return (
-        <html lang="ko" suppressHydrationWarning>
-            <body className="min-h-dvh bg-slate-50 text-slate-900">
-                <Providers>{children}</Providers>
+        <html lang="ko">
+            <body>
+                <RecoilRoot>
+                    <div className="wrap bg-gray-50 min-h-screen flex flex-col">
+                        <Header />
+                        <main className="flex-1 container mx-auto p-6">
+                            {children}
+                        </main>
+                        <Footer />
+                    </div>
+                </RecoilRoot>
             </body>
         </html>
     );
